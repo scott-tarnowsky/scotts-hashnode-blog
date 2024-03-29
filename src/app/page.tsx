@@ -1,7 +1,19 @@
 import Posts from "@/components/posts";
+import { getPosts } from "@/lib/requests";
+import { PostMetadata } from "@/lib/types";
+import { QueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["posts"],
+    queryFn: getPosts,
+    getNextPageParam: (lastPage: { node: PostMetadata; cursor: string }[]) =>
+      lastPage.length < 9 ? undefined : lastPage[lastPage.length - 1].cursor,
+    initialPageParam: "",
+  });
   return (
     <main className="max-w-7xl w-full px-3 xl:p-0 mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-5">

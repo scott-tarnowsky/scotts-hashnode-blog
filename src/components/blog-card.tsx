@@ -8,10 +8,29 @@ export default function BlogCard({ post }: { post: PostMetadata }) {
       <CardHeader>
         <img
           className="rounded-lg h-full"
-          src={post.coverImage}
+          src={post.coverImage.url}
           alt={post.title}
         />
       </CardHeader>
+      <CardContent>
+        <h2 className="text-xl font-bold">
+          <Link className="hover:underline" href={`/${post.slug}`}>
+            {post.title}
+          </Link>
+        </h2>
+        <div className="mt-4 flex gap-3 items-center">
+          {post.author.profilePicture && (
+            <img
+              src={post.author.profilePicture}
+              className="rounded-full h-7 w-7"
+            />
+          )}
+          {post.author.name}
+        </div>
+        <p className="text-gray-500 line-clamp-4 mt-3">
+          {post.subtitle || post.content.text}
+        </p>
+      </CardContent>
     </Card>
   );
 }
